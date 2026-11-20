@@ -16,9 +16,7 @@ export function TermsPage({ onNavigate }: TermsPageProps) {
             <span>boundaries.</span>
           </h1>
         </div>
-        <p>
-          Clear commercial and operational terms for Tattva Sync engagements.
-        </p>
+        <p>Clear operational and scope terms for Tattva Sync engagements.</p>
       </div>
 
       <div className="grid-2">
@@ -27,19 +25,19 @@ export function TermsPage({ onNavigate }: TermsPageProps) {
             <div className="card-tag">01 · SCOPE &amp; APPROVALS</div>
             <h3>Written Scope Before Build</h3>
             <p>
-              Project scope, milestones, and deliverables are agreed upon before development starts.
-              Changes outside agreed scope are handled via written change requests.
+              Project scope, milestones, and deliverables are agreed upon before
+              development starts. Changes outside agreed scope require written approval.
             </p>
           </div>
         </article>
 
         <article className="card">
           <div>
-            <div className="card-tag">02 · THIRD-PARTY COSTS</div>
-            <h3>External APIs &amp; Infrastructure</h3>
+            <div className="card-tag">02 · THIRD-PARTY SERVICES</div>
+            <h3>APIs &amp; Infrastructure</h3>
             <p>
-              Third-party API usage, hosting, and external subscriptions are separate from development
-              fees unless explicitly included in a written agreement.
+              External API usage, hosting, and third-party tools are separate from
+              build fees unless explicitly stated in a written agreement.
             </p>
           </div>
         </article>
@@ -49,8 +47,8 @@ export function TermsPage({ onNavigate }: TermsPageProps) {
             <div className="card-tag">03 · INDEPENDENT PARTNER</div>
             <h3>Tattva Sync &amp; Tynco</h3>
             <p>
-              Tattva Sync and Tynco operate as independent technology partners with separate scopes,
-              contracts, and responsibilities.
+              Tattva Sync and Tynco operate as independent technology partners
+              with distinct responsibilities and separate operational scopes.
             </p>
           </div>
         </article>
@@ -60,8 +58,8 @@ export function TermsPage({ onNavigate }: TermsPageProps) {
             <div className="card-tag">04 · HUMAN OVERSIGHT</div>
             <h3>Controlled Automation</h3>
             <p>
-              AI workflows assist with analysis and drafting; final pricing, contracts, and critical
-              production actions require human sign-off.
+              Workflows assist with analysis and drafting; pricing, contracts, and
+              sensitive production changes stay under human approval.
             </p>
           </div>
         </article>

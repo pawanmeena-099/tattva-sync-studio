@@ -10,25 +10,26 @@ export function TyncoPartnerPage({ onNavigate }: TyncoPartnerPageProps) {
       <div className="partner-copy">
         <div className="eyebrow">INDEPENDENT TECHNOLOGY PARTNER</div>
         <h1>
-          Solutions built here.
+          Built by Tattva Sync.
           <br />
           Operated with <span>Tynco.</span>
         </h1>
         <p>
-          Tattva Sync focuses on requirement discovery, AI automation, and custom software engineering.
-          Tynco operates as an independent technology partner for installation, deployment, technical
-          support, and ongoing maintenance.
+          Tattva Sync focuses on discovery, AI automation, and custom software
+          engineering. Tynco is an independent technology partner handling
+          installation, deployment, updates, monitoring, and ongoing technical
+          maintenance.
         </p>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div className="wizard-actions">
           <a className="primary-button" href="https://tynco.in" target="_blank" rel="noreferrer">
             Visit Tynco <span>↗</span>
           </a>
           <button
             type="button"
-            className="text-button link-btn"
+            className="secondary-button"
             onClick={() => onNavigate('consultation')}
           >
-            Start a project with Tattva Sync <span>→</span>
+            Start with Tattva Sync <span>→</span>
           </button>
         </div>
       </div>

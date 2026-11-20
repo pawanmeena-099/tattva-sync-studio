@@ -17,7 +17,8 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
           </h1>
         </div>
         <p>
-          Focused on understanding real business problems and building clear, dependable automation and software.
+          Focused on understanding how businesses actually operate and building
+          clear, maintainable solutions.
         </p>
       </div>
 
@@ -28,11 +29,11 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
         </div>
         <div>
           <strong>Clear Guardrails</strong>
-          <span>Pricing, contracts, and sensitive/production actions remain under human approval.</span>
+          <span>Pricing, contracts, and critical production actions require human sign-off.</span>
         </div>
         <div>
-          <strong>Honest Scope</strong>
-          <span>We define clear boundaries and deliverables rather than overpromising unbuilt tools.</span>
+          <strong>Independent Partnership</strong>
+          <span>Tattva Sync builds solutions while Tynco handles installation, updates &amp; maintenance.</span>
         </div>
       </div>
 
@@ -42,7 +43,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
           className="primary-button"
           onClick={() => onNavigate('consultation')}
         >
-          Start a conversation <span>↗</span>
+          Book a Consultation <span>↗</span>
         </button>
       </div>
     </section>

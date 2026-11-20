@@ -1,4 +1,5 @@
 import { type PageKey, solutionsData } from '../data/siteData'
+
 interface SolutionsPageProps {
   onNavigate: (page: PageKey) => void
 }
@@ -12,11 +13,12 @@ export function SolutionsPage({ onNavigate }: SolutionsPageProps) {
           <h1>
             Customized around
             <br />
-            <span>your actual needs.</span>
+            <span>your real workflow.</span>
           </h1>
         </div>
         <p>
-          We do not push pre-packaged software. We first understand your workflow and then build what fits.
+          We study your bottlenecks first and then build the right AI automation,
+          custom software, or integration.
         </p>
       </div>
 
@@ -31,19 +33,24 @@ export function SolutionsPage({ onNavigate }: SolutionsPageProps) {
               <div className="card-tag">{item.tag}</div>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
+              <ul className="feature-list">
+                {item.deliverables.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
             </div>
-            <div className="card-foot">{item.deliverables}</div>
+            <div className="card-foot">{item.whenToUse}</div>
           </article>
         ))}
       </div>
 
-      <div style={{ marginTop: '40px' }}>
+      <div style={{ marginTop: '36px' }}>
         <button
           type="button"
           className="primary-button"
           onClick={() => onNavigate('consultation')}
         >
-          Discuss your workflow <span>↗</span>
+          Discuss your requirement <span>↗</span>
         </button>
       </div>
     </section>

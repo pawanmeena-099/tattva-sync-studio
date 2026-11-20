@@ -17,21 +17,24 @@ export function HowWeWorkPage({ onNavigate }: HowWeWorkPageProps) {
           </h1>
         </div>
         <p>
-          Structured discovery, written scope approval, and human control over key actions.
+          Clear scope before build, human sign-off on critical actions, and
+          independent operational support via Tynco.
         </p>
       </div>
 
       <div className="approach-steps">
         {processStepsData.map((item) => (
           <div key={item.step}>
-            <span>{item.step}</span>
+            <span>
+              {item.step} · {item.owner}
+            </span>
             <strong>{item.title}</strong>
             <small>{item.detail}</small>
           </div>
         ))}
       </div>
 
-      <div style={{ marginTop: '40px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+      <div className="wizard-actions" style={{ marginTop: '36px' }}>
         <button
           type="button"
           className="primary-button"
@@ -41,10 +44,10 @@ export function HowWeWorkPage({ onNavigate }: HowWeWorkPageProps) {
         </button>
         <button
           type="button"
-          className="text-button link-btn"
+          className="secondary-button"
           onClick={() => onNavigate('demo-labs')}
         >
-          Explore Demo Labs <span>→</span>
+          Open Demo Labs <span>→</span>
         </button>
       </div>
     </section>

@@ -16,19 +16,17 @@ export function PrivacyPolicyPage({ onNavigate }: PrivacyPolicyPageProps) {
             <span>privacy basics.</span>
           </h1>
         </div>
-        <p>
-          How submitted project enquiries and basic contact details are handled on Tattva Sync.
-        </p>
+        <p>How submitted consultation details are handled on Tattva Sync.</p>
       </div>
 
       <div className="grid-2">
         <article className="card">
           <div>
             <div className="card-tag">01 · INFORMATION COLLECTED</div>
-            <h3>Enquiry &amp; Contact Details</h3>
+            <h3>Enquiry Details</h3>
             <p>
-              When you submit a consultation or project request, we collect only the name, email,
-              selected focus area, and workflow details you share voluntarily.
+              We collect only the name, email, focus area, and workflow details
+              you enter voluntarily in consultation requests.
             </p>
           </div>
         </article>
@@ -36,31 +34,31 @@ export function PrivacyPolicyPage({ onNavigate }: PrivacyPolicyPageProps) {
         <article className="card">
           <div>
             <div className="card-tag">02 · PURPOSE OF USE</div>
-            <h3>Discovery &amp; Scope Review</h3>
+            <h3>Discovery Review</h3>
             <p>
-              Your details are used solely to understand your business requirement, prepare a
-              discovery response, and communicate regarding your project enquiry.
+              Submitted information is used to understand your workflow need and
+              respond to your consultation request.
             </p>
           </div>
         </article>
 
         <article className="card">
           <div>
-            <div className="card-tag">03 · ACCESS &amp; SEPARATION</div>
-            <h3>Controlled Access</h3>
+            <div className="card-tag">03 · ACCESS BOUNDARIES</div>
+            <h3>Separate Records</h3>
             <p>
-              Client enquiries and project records are kept separate across independent partners
-              and shared only where explicitly scoped and agreed.
+              Project enquiries and operational records are kept separate across
+              independent partners unless explicitly scoped otherwise.
             </p>
           </div>
         </article>
 
         <article className="card">
           <div>
-            <div className="card-tag">04 · UPDATES &amp; REQUESTS</div>
-            <h3>Correction or Removal</h3>
+            <div className="card-tag">04 · CORRECTIONS</div>
+            <h3>Update or Removal</h3>
             <p>
-              You can request updates or removal of your submitted enquiry details at any time
+              You can request updates or removal of submitted enquiry information
               through our consultation contact channel.
             </p>
           </div>

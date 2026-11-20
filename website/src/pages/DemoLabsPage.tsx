@@ -6,65 +6,65 @@ interface DemoLabsPageProps {
 }
 
 const samplePrompts = [
-  'We receive 60+ customer orders on WhatsApp daily and manually type them into Excel.',
-  'Our sales team gets leads from website and Instagram but forgets timely follow-ups.',
-  'We use 3 different tools for billing, stock, and support and spend hours making weekly reports.',
+  'We get orders from chats and manually enter them into sheets, causing delays and stock checks.',
+  'Inbound enquiries come in but follow-ups and qualification take too long manually.',
+  'Data sits across multiple sheets and tools, making weekly status reporting slow.',
 ]
 
 export function DemoLabsPage({ onNavigate }: DemoLabsPageProps) {
-  const [problemInput, setProblemInput] = useState(samplePrompts[0])
-  const [analyzed, setAnalyzed] = useState(true)
+  const [inputText, setInputText] = useState(samplePrompts[0])
+  const [showPlan, setShowPlan] = useState(true)
 
-  const getSimulatedPlan = (text: string) => {
-    const lower = text.toLowerCase()
-    if (lower.includes('whatsapp') || lower.includes('order') || lower.includes('stock')) {
+  const buildPreview = (text: string) => {
+    const q = text.toLowerCase()
+    if (q.includes('order') || q.includes('stock') || q.includes('sheet')) {
       return {
-        category: 'Custom Software + Order Automation',
-        bottleneck: 'Manual message-to-spreadsheet entry causing delays and stock mismatch.',
-        tattvaPlan: 'Structured order intake + live order/stock dashboard + automated daily summary.',
-        tyncoPlan: 'Server/cloud installation, database backup setup, monthly updates & support.',
+        direction: 'Custom Tracker + Workflow Automation',
+        bottleneck: 'Manual order capture, duplicate updates & delayed stock visibility.',
+        tattvaScope: 'Structured intake + live status tracker + automated daily summary.',
+        tyncoScope: 'Installation, environment setup, updates & ongoing technical support.',
       }
     }
-    if (lower.includes('lead') || lower.includes('follow') || lower.includes('instagram')) {
+    if (q.includes('enquir') || q.includes('follow') || q.includes('lead')) {
       return {
-        category: 'AI Lead Reception & CRM Workflow',
-        bottleneck: 'Unstructured inbound enquiries and slow manual qualification.',
-        tattvaPlan: 'AI inquiry classifier + auto-brief summary + instant notification with approval gate.',
-        tyncoPlan: 'Webhook hosting, uptime alerting & connector maintenance.',
+        direction: 'AI Workflow + Lead Triage Brief',
+        bottleneck: 'Unstructured inbound requests and slow manual prioritization.',
+        tattvaScope: 'Intake capture + structured brief summary + approval-gated routing.',
+        tyncoScope: 'Webhook deployment, health monitoring & ongoing upkeep.',
       }
     }
     return {
-      category: 'System Integration & Operations Dashboard',
-      bottleneck: 'Disconnected tools requiring manual weekly compilation.',
-      tattvaPlan: 'Automated API/sheet sync pipeline + unified operational dashboard.',
-      tyncoPlan: 'Scheduled health checks, monitoring & ongoing technical care.',
+      direction: 'System Integration + Reporting View',
+      bottleneck: 'Disconnected tools and manual weekly status compilation.',
+      tattvaScope: 'Automated sync pipeline + unified summary view.',
+      tyncoScope: 'Deployment, maintenance & scheduled operational checks.',
     }
   }
 
-  const plan = getSimulatedPlan(problemInput)
+  const preview = buildPreview(inputText)
 
   return (
     <section className="section">
       <div className="section-heading">
         <div>
-          <div className="eyebrow">INTERACTIVE DEMO LAB · SANDBOX</div>
+          <div className="eyebrow">DEMO LABS · SANDBOX PREVIEW</div>
           <h1>
-            Test how we turn a problem
+            See how a problem turns
             <br />
-            <span>into a clear system plan.</span>
+            <span>into a clear plan.</span>
           </h1>
         </div>
         <p>
-          Try a sample operational bottleneck or type your own below. This sandbox
-          demonstrates our discovery structure before real engineering begins.
+          Interactive sandbox preview showing how Tattva Sync structures a
+          workflow problem and how Tynco supports operations.
         </p>
       </div>
 
       <div className="lab-container">
         <div className="lab-input-box">
           <div className="card-top">
-            <span>INPUT · YOUR CURRENT WORKFLOW</span>
-            <span className="demo-badge">SANDBOX SIMULATOR</span>
+            <span>SAMPLE WORKFLOW INPUT</span>
+            <span className="demo-badge">SANDBOX DEMO</span>
           </div>
 
           <div className="sample-chips">
@@ -74,8 +74,8 @@ export function DemoLabsPage({ onNavigate }: DemoLabsPageProps) {
                 type="button"
                 className="chip-btn"
                 onClick={() => {
-                  setProblemInput(sample)
-                  setAnalyzed(true)
+                  setInputText(sample)
+                  setShowPlan(true)
                 }}
               >
                 Sample #{idx + 1}
@@ -86,49 +86,51 @@ export function DemoLabsPage({ onNavigate }: DemoLabsPageProps) {
           <textarea
             className="enquiry-textarea"
             rows={4}
-            value={problemInput}
+            value={inputText}
             onChange={(e) => {
-              setProblemInput(e.target.value)
-              setAnalyzed(false)
+              setInputText(e.target.value)
+              setShowPlan(false)
             }}
-            placeholder="Describe where your team wastes time or faces manual errors..."
+            placeholder="Describe a manual workflow or operational bottleneck..."
           />
 
           <button
             type="button"
             className="primary-button"
             style={{ marginTop: '14px' }}
-            onClick={() => setAnalyzed(true)}
+            onClick={() => setShowPlan(true)}
           >
-            Generate Sample Blueprint <span>↗</span>
+            Preview Structure <span>↗</span>
           </button>
         </div>
 
-        {analyzed && problemInput.trim() && (
+        {showPlan && inputText.trim() && (
           <div className="lab-output-box">
             <div className="card-top">
-              <span>OUTPUT · STRUCTURED DISCOVERY BRIEF</span>
-              <span style={{ color: '#58D6E8', fontSize: '11px' }}>HUMAN APPROVAL REQUIRED</span>
+              <span>DRAFT DISCOVERY STRUCTURE</span>
+              <span style={{ color: '#58D6E8', fontSize: '11px' }}>HUMAN REVIEW REQUIRED</span>
             </div>
 
             <div className="lab-result-item">
-              <small>RECOMMENDED DIRECTION</small>
-              <strong>{plan.category}</strong>
+              <small>SUGGESTED DIRECTION</small>
+              <p>
+                <strong>{preview.direction}</strong>
+              </p>
             </div>
 
             <div className="lab-result-item">
-              <small>IDENTIFIED BOTTLENECK</small>
-              <p>{plan.bottleneck}</p>
+              <small>BOTTLENECK SUMMARY</small>
+              <p>{preview.bottleneck}</p>
             </div>
 
             <div className="lab-result-item">
-              <small>TATTVA SYNC · DESIGN &amp; BUILD SCOPE</small>
-              <p>{plan.tattvaPlan}</p>
+              <small>TATTVA SYNC · DESIGN &amp; BUILD</small>
+              <p>{preview.tattvaScope}</p>
             </div>
 
             <div className="lab-result-item">
-              <small>TYNCO · INSTALL, UPDATE &amp; MAINTENANCE SCOPE</small>
-              <p>{plan.tyncoPlan}</p>
+              <small>TYNCO · INSTALL, UPDATE &amp; MAINTAIN</small>
+              <p>{preview.tyncoScope}</p>
             </div>
 
             <button
@@ -137,7 +139,7 @@ export function DemoLabsPage({ onNavigate }: DemoLabsPageProps) {
               style={{ marginTop: '14px' }}
               onClick={() => onNavigate('consultation')}
             >
-              Send This Requirement for Real Discovery <span>→</span>
+              Book a Consultation <span>→</span>
             </button>
           </div>
         )}

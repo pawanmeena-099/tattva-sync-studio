@@ -7,7 +7,6 @@ interface FooterProps {
 export function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="site-footer">
-      {/* Top Action Strip */}
       <div className="footer-cta-band">
         <div>
           <span className="eyebrow">READY WHEN YOU ARE</span>
@@ -22,7 +21,6 @@ export function Footer({ onNavigate }: FooterProps) {
         </button>
       </div>
 
-      {/* Main 4-Column Grid */}
       <div className="footer-grid">
         <div className="footer-brand-col">
           <button
@@ -36,8 +34,8 @@ export function Footer({ onNavigate }: FooterProps) {
             </span>
           </button>
           <p className="footer-tagline">
-            Problem-first AI automation and custom software solutions. We understand
-            how your business works before building what fits.
+            Problem-first AI automation and custom software solutions. We
+            understand how your business works before building what fits.
           </p>
           <div className="footer-pill">Understand · Design · Build</div>
         </div>
@@ -85,12 +83,11 @@ export function Footer({ onNavigate }: FooterProps) {
             Privacy Policy
           </button>
           <span className="footer-note">
-            All production changes &amp; pricing require explicit human approval.
+            Production changes, pricing &amp; external actions remain human-controlled.
           </span>
         </div>
       </div>
 
-      {/* Bottom Copyright Bar */}
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Tattva Sync. All rights reserved.</span>
         <span>Independent Technology Partner: Tynco (Install · Maintain · Support)</span>

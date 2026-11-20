@@ -25,8 +25,6 @@ const validPages: PageKey[] = [
   'privacy',
 ]
 
-
-
 function getPageFromHash(): PageKey {
   const hash = window.location.hash.replace('#', '') as PageKey
   return validPages.includes(hash) ? hash : 'home'
