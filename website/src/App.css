@@ -30,3 +30,15 @@ footer { padding: 32px 0; border-top: 1px solid #222c52; color: #7c87a6; font-si
 .form .btn { border: 0; cursor: pointer; margin-top: 0; font: inherit; font-weight: 600; }
 .form .btn:disabled { opacity: 0.6; cursor: wait; }
 .error { color: #e88a7a; }
+.nav-links { display: flex; align-items: center; gap: 20px; font-size: 0.95rem; }
+.nav-links a { color: var(--muted); text-decoration: none; }
+.nav-links a:hover { color: var(--text); }
+.nav-links .btn-small { background: var(--accent); color: var(--accent-text); padding: 8px 14px; border-radius: 8px; font-weight: 600; }
+.section { padding: 48px 0; }
+.section .muted { color: var(--muted); margin-top: 8px; }
+.step { color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+.badge { display: inline-block; margin-top: 4px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-size: 0.8rem; }
+@media (max-width: 640px) {
+  nav { flex-direction: column; gap: 12px; }
+  .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+}
