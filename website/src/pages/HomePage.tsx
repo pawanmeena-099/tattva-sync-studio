@@ -5,124 +5,45 @@ interface HomePageProps {
   onNavigate: (page: PageKey) => void
 }
 
-interface FlowStep {
-  stage: string
-  actor: string
-  action: string
-  output: string
+interface SystemMode {
+  key: 'ai-flow' | 'custom-app' | 'data-sync'
+  label: string
+  summary: string
+  stageLabel: string
+  detail: string
+  guardrail: string
 }
 
-const workflowPresets: Record<
-  'orders' | 'leads' | 'custom',
+const systemModes: SystemMode[] = [
   {
-    beforeText: string
-    afterText: string
-    steps: FlowStep[]
-  }
-> = {
-  orders: {
-    beforeText: 'Manual chats + spreadsheet re-entry + late stock updates',
-    afterText: 'Structured capture + live order tracker + daily summary',
-    steps: [
-      {
-        stage: '01 · Intake',
-        actor: 'Client / Channel',
-        action: 'Order or request comes in with item and quantity details',
-        output: 'Captured in structured record',
-      },
-      {
-        stage: '02 · Check',
-        actor: 'Tattva Sync Logic',
-        action: 'Validates required fields, flags gaps & checks status',
-        output: 'Fewer manual errors',
-      },
-      {
-        stage: '03 · Approval',
-        actor: 'Business Owner',
-        action: 'Reviews exceptions and confirms priority orders',
-        output: 'Human control retained',
-      },
-      {
-        stage: '04 · Run & Care',
-        actor: 'Tynco Partner',
-        action: 'Handles installation, updates, monitoring & support',
-        output: 'Reliable operations',
-      },
-    ],
+    key: 'ai-flow',
+    label: 'AI & Workflows',
+    summary: 'Bottleneck audit → Structured intake → Human-approved action',
+    stageLabel: '01 · Understand & Route',
+    detail: 'Classifies inbound needs, drafts discovery notes, and holds sensitive actions for approval.',
+    guardrail: 'Human approval required before external sends or commitments',
   },
-  leads: {
-    beforeText: 'Scattered enquiries + slow follow-ups + manual notes',
-    afterText: 'Organized leads + clear summary brief + timely follow-up',
-    steps: [
-      {
-        stage: '01 · Capture',
-        actor: 'Inbound / Form',
-        action: 'Prospect details and workflow notes enter one pipeline',
-        output: 'Clean inquiry record',
-      },
-      {
-        stage: '02 · Structure',
-        actor: 'AI Workflow',
-        action: 'Summarizes bottleneck, fit & priority for review',
-        output: 'Brief ready for review',
-      },
-      {
-        stage: '03 · Decision',
-        actor: 'You',
-        action: 'Approve scope or outreach before external action',
-        output: 'No unapproved actions',
-      },
-      {
-        stage: '04 · Maintain',
-        actor: 'Tynco Partner',
-        action: 'Keeps hosting, checks & ongoing maintenance running',
-        output: 'Steady pipeline upkeep',
-      },
-    ],
+  {
+    key: 'custom-app',
+    label: 'Custom Software',
+    summary: 'Tailored internal tools & portals shaped to real operations',
+    stageLabel: '02 · Design & Build',
+    detail: 'Replaces rigid spreadsheets and workarounds with focused workflows built for your team.',
+    guardrail: 'Scoped after workflow discovery · Clean handover docs',
   },
-  custom: {
-    beforeText: 'Disconnected sheets + workarounds + hours on status',
-    afterText: 'Tailored software or sync + clear docs + clean handover',
-    steps: [
-      {
-        stage: '01 · Audit',
-        actor: 'Tattva Sync',
-        action: 'Maps real bottlenecks across current tools and team steps',
-        output: 'Clear problem map',
-      },
-      {
-        stage: '02 · Architect',
-        actor: 'Tattva Sync',
-        action: 'Builds custom software, automation, or integration to fit',
-        output: 'Purpose-built system',
-      },
-      {
-        stage: '03 · Verify',
-        actor: 'Tattva Sync',
-        action: 'Tests real scenarios, edge cases & handover documentation',
-        output: 'Tested & documented',
-      },
-      {
-        stage: '04 · Support',
-        actor: 'Tynco Partner',
-        action: 'Installs, updates & supports live usage as independent partner',
-        output: 'Ongoing stability',
-      },
-    ],
+  {
+    key: 'data-sync',
+    label: 'Data & Sync',
+    summary: 'Connected pipelines, live metrics & independent Tynco upkeep',
+    stageLabel: '03 · Deliver & Operate',
+    detail: 'Keeps records aligned across tools while Tynco handles installation, updates & monitoring.',
+    guardrail: 'Tattva Sync builds · Independent partner Tynco operates',
   },
-}
+]
 
 export function HomePage({ onNavigate }: HomePageProps) {
-  const [presetKey, setPresetKey] = useState<'orders' | 'leads' | 'custom'>('orders')
-  const [activeStepIdx, setActiveStepIdx] = useState<number>(0)
-
-  const currentPreset = workflowPresets[presetKey]
-  const activeStep = currentPreset.steps[activeStepIdx] ?? currentPreset.steps[0]
-
-  const selectPreset = (key: 'orders' | 'leads' | 'custom') => {
-    setPresetKey(key)
-    setActiveStepIdx(0)
-  }
+  const [selectedMode, setSelectedMode] = useState<'ai-flow' | 'custom-app' | 'data-sync'>('ai-flow')
+  const activeMode = systemModes.find((m) => m.key === selectedMode) ?? systemModes[0]
 
   return (
     <>
@@ -133,7 +54,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="hero-content">
           <div className="eyebrow">
             <span className="status-dot" />
-            TATTVA SYNC · AI AUTOMATION &amp; CUSTOM SOFTWARE
+            TATTVA SYNC · AI SYSTEMS STUDIO
           </div>
 
           <h1>
@@ -143,108 +64,75 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </h1>
 
           <p className="hero-description">
-            We don&apos;t force predefined software onto your team. We study how
-            your work actually runs, spot bottlenecks, and build tailored AI
-            automation or custom software — while our independent partner{' '}
-            <strong>Tynco</strong> handles installation, updates, and ongoing
-            maintenance.
+            We study how your work actually runs before choosing tools — engineering
+            controlled AI automation, custom software, integrations, and data
+            systems around real bottlenecks.
           </p>
 
           <div className="hero-actions">
             <button
               type="button"
               className="primary-button"
-              onClick={() => onNavigate('consultation')}
+              onClick={() => onNavigate('demo-labs')}
             >
-              Book a Consultation <span>↗</span>
+              Explore Our Systems <span>↗</span>
             </button>
             <button
               type="button"
               className="secondary-button"
-              onClick={() => onNavigate('demo-labs')}
+              onClick={() => onNavigate('consultation')}
             >
-              Explore Demo Labs <span>→</span>
+              Start a Project <span>→</span>
             </button>
           </div>
         </div>
 
-        <div className="system-console">
-          <div className="console-top">
-            <div className="console-dots">
-              <span />
-              <span />
-              <span />
-            </div>
-            <span className="console-title">WORKFLOW PREVIEW</span>
+        {/* Single Interactive Product Panel on Desktop Right */}
+        <div className="studio-panel" aria-label="Interactive System Preview">
+          <div className="studio-panel-bar">
+            <span className="panel-dot" />
+            <span>SYSTEM ARCHITECTURE VIEW</span>
           </div>
 
-          <div className="console-tabs">
-            <button
-              type="button"
-              className={`console-tab ${presetKey === 'orders' ? 'active' : ''}`}
-              onClick={() => selectPreset('orders')}
-            >
-              Orders &amp; Stock
-            </button>
-            <button
-              type="button"
-              className={`console-tab ${presetKey === 'leads' ? 'active' : ''}`}
-              onClick={() => selectPreset('leads')}
-            >
-              Lead Pipeline
-            </button>
-            <button
-              type="button"
-              className={`console-tab ${presetKey === 'custom' ? 'active' : ''}`}
-              onClick={() => selectPreset('custom')}
-            >
-              Custom App
-            </button>
-          </div>
-
-          <div className="before-after-strip">
-            <div className="ba-box ba-before">
-              <small>BEFORE</small>
-              <span>{currentPreset.beforeText}</span>
-            </div>
-            <div className="ba-box ba-after">
-              <small>AFTER TATTVA SYNC</small>
-              <span>{currentPreset.afterText}</span>
-            </div>
-          </div>
-
-          <div className="step-selector-row">
-            {currentPreset.steps.map((st, idx) => (
+          <div className="studio-mode-tabs">
+            {systemModes.map((mode) => (
               <button
-                key={st.stage}
+                key={mode.key}
                 type="button"
-                className={`step-pill ${idx === activeStepIdx ? 'active' : ''}`}
-                onClick={() => setActiveStepIdx(idx)}
+                className={`studio-mode-tab ${mode.key === selectedMode ? 'active' : ''}`}
+                onClick={() => setSelectedMode(mode.key)}
               >
-                {st.stage.split(' · ')[0]}
+                {mode.label}
               </button>
             ))}
           </div>
 
-          <div className="console-detail-card">
-            <div className="console-detail-head">
-              <strong>{activeStep.stage}</strong>
-              <span>{activeStep.actor}</span>
-            </div>
-            <p>{activeStep.action}</p>
-            <div className="console-output-tag">Outcome: {activeStep.output}</div>
+          <div className="studio-panel-body">
+            <div className="studio-stage">{activeMode.stageLabel}</div>
+            <h3 className="studio-panel-headline">{activeMode.summary}</h3>
+            <p className="studio-panel-desc">{activeMode.detail}</p>
+            <div className="studio-guardrail">{activeMode.guardrail}</div>
           </div>
         </div>
       </section>
 
+      <section className="intro-strip">
+        <span>UNDERSTAND → DESIGN → BUILD</span>
+        <p>
+          Problem-first engineering with human control — paired with Tynco as an
+          independent partner for installation, updates, and maintenance.
+        </p>
+      </section>
+
+      {/* Solutions Overview (Refined, Less Card Clutter) */}
       <section className="section alt-bg">
         <div className="section-heading">
           <div>
-            <div className="eyebrow">SOLUTIONS</div>
+            <div className="eyebrow">CAPABILITIES</div>
             <h2>
-              Problem first.
+              Built around real
               <br />
-              <span>Software second.</span>
+              <span>operational needs.</span>
             </h2>
           </div>
           <button
@@ -252,7 +140,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             className="text-button link-btn"
             onClick={() => onNavigate('solutions')}
           >
-            View all solutions <span>→</span>
+            All 4 solution pillars <span>→</span>
           </button>
         </div>
 
@@ -262,16 +150,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <div>
                 <div className="card-top">
                   <span>{item.number}</span>
-                  <span style={{ color: '#58D6E8' }}>↗</span>
+                  <span className="card-arrow">↗</span>
                 </div>
                 <div className="card-tag">{item.tag}</div>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
-                <ul className="feature-list">
-                  {item.deliverables.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
               </div>
               <div className="card-foot">{item.whenToUse}</div>
             </article>
@@ -279,14 +162,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
+      {/* How We Work — Horizontal Timeline on Desktop */}
       <section className="section">
         <div className="section-heading">
           <div>
             <div className="eyebrow">HOW WE WORK</div>
             <h2>
-              Five steps from
+              From bottleneck to
               <br />
-              <span>discovery to handover.</span>
+              <span>reliable operation.</span>
             </h2>
           </div>
           <button
@@ -294,16 +178,17 @@ export function HomePage({ onNavigate }: HomePageProps) {
             className="text-button link-btn"
             onClick={() => onNavigate('how-we-work')}
           >
-            Full process details <span>→</span>
+            Process &amp; deliverables <span>→</span>
           </button>
         </div>
 
-        <div className="approach-steps">
+        <div className="timeline-track">
           {processStepsData.map((step) => (
-            <div key={step.step}>
-              <span>
-                {step.step} · {step.owner}
-              </span>
+            <div className="timeline-node" key={step.step}>
+              <div className="timeline-head">
+                <span className="timeline-num">{step.step}</span>
+                <span className="timeline-owner">{step.owner}</span>
+              </div>
               <strong>{step.title}</strong>
               <small>{step.detail}</small>
             </div>
