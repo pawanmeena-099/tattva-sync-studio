@@ -1,4 +1,3 @@
-
 * {
   box-sizing: border-box;
 }
@@ -18,6 +17,6 @@ body {
 }
 
 ::selection {
-  background: #c4f36a;
-  color: #090b09;
+  background: #58D6E8;
+  color: #071318;
 }
