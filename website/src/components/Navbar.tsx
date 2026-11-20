@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { PageKey } from '../data/siteData'
 
 interface NavbarProps {
@@ -15,12 +16,19 @@ const navItems: { key: PageKey; label: string }[] = [
 ]
 
 export function Navbar({ currentPage, onNavigate }: NavbarProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const handleSelect = (page: PageKey) => {
+    setMenuOpen(false)
+    onNavigate(page)
+  }
+
   return (
     <header className="navbar">
       <button
         type="button"
         className="brand brand-btn"
-        onClick={() => onNavigate('home')}
+        onClick={() => handleSelect('home')}
       >
         <span className="brand-mark">T</span>
         <span>
@@ -34,20 +42,54 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
             key={item.key}
             type="button"
             className={`nav-link-btn ${currentPage === item.key ? 'active' : ''}`}
-            onClick={() => onNavigate(item.key)}
+            onClick={() => handleSelect(item.key)}
           >
             {item.label}
           </button>
         ))}
       </nav>
 
-      <button
-        type="button"
-        className="nav-cta"
-        onClick={() => onNavigate('consultation')}
-      >
-        Book a Consultation <span>↗</span>
-      </button>
+      <div className="nav-right-group">
+        <button
+          type="button"
+          className="nav-cta desktop-only-cta"
+          onClick={() => handleSelect('consultation')}
+        >
+          Book a Consultation <span>↗</span>
+        </button>
+
+        <button
+          type="button"
+          className="mobile-menu-btn"
+          aria-label="Toggle Menu"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+      </div>
+
+      {menuOpen && (
+        <div className="mobile-drawer">
+          {navItems.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={`mobile-drawer-link ${currentPage === item.key ? 'active' : ''}`}
+              onClick={() => handleSelect(item.key)}
+            >
+              {item.label}
+            </button>
+          ))}
+          <button
+            type="button"
+            className="primary-button"
+            style={{ justifyContent: 'center', marginTop: '8px' }}
+            onClick={() => handleSelect('consultation')}
+          >
+            Book a Consultation <span>↗</span>
+          </button>
+        </div>
+      )}
     </header>
   )
 }

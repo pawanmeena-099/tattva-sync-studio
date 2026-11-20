@@ -11,6 +11,7 @@ import { AboutPage } from './pages/AboutPage'
 import { TyncoPartnerPage } from './pages/TyncoPartnerPage'
 import { ConsultationPage } from './pages/ConsultationPage'
 import { TermsPage } from './pages/TermsPage'
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage'
 
 const validPages: PageKey[] = [
   'home',
@@ -21,7 +22,10 @@ const validPages: PageKey[] = [
   'tynco-partner',
   'consultation',
   'terms',
+  'privacy',
 ]
+
+
 
 function getPageFromHash(): PageKey {
   const hash = window.location.hash.replace('#', '') as PageKey
@@ -55,6 +59,7 @@ export function App() {
         {currentPage === 'tynco-partner' && <TyncoPartnerPage onNavigate={navigateTo} />}
         {currentPage === 'consultation' && <ConsultationPage />}
         {currentPage === 'terms' && <TermsPage onNavigate={navigateTo} />}
+        {currentPage === 'privacy' && <PrivacyPolicyPage onNavigate={navigateTo} />}
       </main>
       <Footer onNavigate={navigateTo} />
     </div>
