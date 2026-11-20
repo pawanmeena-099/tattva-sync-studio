@@ -18,8 +18,9 @@ export function ConsultationPage() {
   const [includeTyncoSupport, setIncludeTyncoSupport] = useState(true)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [deliveryStatus, setDeliveryStatus] = useState<'webhook-sent' | 'local-recorded'>('local-recorded')
+  const [deliveryStatus, setDeliveryStatus] = useState<'synced' | 'local-recorded'>('local-recorded')
   const [referenceId, setReferenceId] = useState('')
+  const [copied, setCopied] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -47,24 +48,41 @@ export function ConsultationPage() {
       },
     }
 
-    const webhookUrl = import.meta.env.VITE_INQUIRY_WEBHOOK_URL
-    if (webhookUrl) {
-      try {
-        const res = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        setDeliveryStatus(res.ok ? 'webhook-sent' : 'local-recorded')
-      } catch {
-        setDeliveryStatus('local-recorded')
-      }
-    } else {
+    const endpointUrl = import.meta.env.VITE_INQUIRY_WEBHOOK_URL || '/api/inquiry'
+    try {
+      const res = await fetch(endpointUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      setDeliveryStatus(res.ok ? 'synced' : 'local-recorded')
+    } catch {
       setDeliveryStatus('local-recorded')
     }
 
     setSubmitting(false)
     setSubmitted(true)
+  }
+
+  const copyBriefText = async () => {
+    const summary = [
+      `Reference: ${referenceId}`,
+      `Name: ${name}`,
+      `Business: ${company || 'Not specified'}`,
+      `Email: ${email}`,
+      `Focus Pillar: ${pillar}`,
+      `Current Tools: ${currentTools || 'Not specified'}`,
+      `Tynco Operations Care: ${includeTyncoSupport ? 'Yes (Install, updates & support)' : 'Build handover only'}`,
+      `Workflow / Bottleneck: ${currentProcess}`,
+    ].join('\n')
+
+    try {
+      await navigator.clipboard.writeText(summary)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    } catch {
+      // Ignore clipboard errors in restricted browsers
+    }
   }
 
   return (
@@ -90,8 +108,8 @@ export function ConsultationPage() {
           <div className="card-top" style={{ marginBottom: '12px' }}>
             <span className="demo-badge">REF · {referenceId}</span>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-              {deliveryStatus === 'webhook-sent'
-                ? 'Synced to intake pipeline'
+              {deliveryStatus === 'synced'
+                ? 'Synced to intake server'
                 : 'Recorded for review'}
             </span>
           </div>
@@ -120,17 +138,25 @@ export function ConsultationPage() {
             </div>
           </div>
 
-          <button
-            type="button"
-            className="secondary-button"
-            style={{ marginTop: '18px' }}
-            onClick={() => {
-              setSubmitted(false)
-              setCurrentProcess('')
-            }}
-          >
-            Submit Another Workflow <span>→</span>
-          </button>
+          <div className="wizard-actions" style={{ marginTop: '18px' }}>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={copyBriefText}
+            >
+              {copied ? 'Copied Brief ✓' : 'Copy Discovery Brief'}
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => {
+                setSubmitted(false)
+                setCurrentProcess('')
+              }}
+            >
+              Submit Another Workflow <span>→</span>
+            </button>
+          </div>
         </div>
       ) : (
         <form className="enquiry-form" onSubmit={handleSubmit}>
