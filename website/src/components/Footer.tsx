@@ -17,7 +17,7 @@ export function Footer({ onNavigate }: FooterProps) {
           className="primary-button"
           onClick={() => onNavigate('consultation')}
         >
-          Book a Discovery Call <span>↗</span>
+          Start a Project <span>↗</span>
         </button>
       </div>
 
@@ -34,25 +34,25 @@ export function Footer({ onNavigate }: FooterProps) {
             </span>
           </button>
           <p className="footer-tagline">
-            Problem-first AI automation and custom software solutions. We
-            understand how your business works before building what fits.
+            AI systems studio focused on problem-first automation, custom
+            software, integrations, and data intelligence.
           </p>
           <div className="footer-pill">Understand · Design · Build</div>
         </div>
 
         <div className="footer-col">
-          <h4>SOLUTIONS</h4>
+          <h4>STUDIO</h4>
           <button type="button" className="footer-link-btn" onClick={() => onNavigate('solutions')}>
-            AI &amp; Custom Software
+            Solutions (4 Pillars)
           </button>
-          <button type="button" className="footer-link-btn" onClick={() => onNavigate('how-we-work')}>
-            How We Work
+          <button type="button" className="footer-link-btn" onClick={() => onNavigate('projects')}>
+            Projects &amp; Prototypes
           </button>
           <button type="button" className="footer-link-btn" onClick={() => onNavigate('demo-labs')}>
             Interactive Demo Labs
           </button>
-          <button type="button" className="footer-link-btn" onClick={() => onNavigate('consultation')}>
-            Start a Project Inquiry
+          <button type="button" className="footer-link-btn" onClick={() => onNavigate('how-we-work')}>
+            How We Work
           </button>
         </div>
 

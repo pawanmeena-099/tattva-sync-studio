@@ -9,8 +9,9 @@ interface NavbarProps {
 const navItems: { key: PageKey; label: string }[] = [
   { key: 'home', label: 'Home' },
   { key: 'solutions', label: 'Solutions' },
-  { key: 'how-we-work', label: 'How We Work' },
+  { key: 'projects', label: 'Projects' },
   { key: 'demo-labs', label: 'Demo Labs' },
+  { key: 'how-we-work', label: 'How We Work' },
   { key: 'about', label: 'About' },
   { key: 'tynco-partner', label: 'Tynco Partner' },
 ]
@@ -55,7 +56,7 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
           className="nav-cta desktop-only-cta"
           onClick={() => handleSelect('consultation')}
         >
-          Book a Consultation <span>↗</span>
+          Start a Project <span>↗</span>
         </button>
 
         <button
@@ -86,7 +87,7 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
             style={{ justifyContent: 'center', marginTop: '8px' }}
             onClick={() => handleSelect('consultation')}
           >
-            Book a Consultation <span>↗</span>
+            Start a Project <span>↗</span>
           </button>
         </div>
       )}

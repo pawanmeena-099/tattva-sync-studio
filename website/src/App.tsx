@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
 import { HomePage } from './pages/HomePage'
 import { SolutionsPage } from './pages/SolutionsPage'
+import { ProjectsPage } from './pages/ProjectsPage'
 import { HowWeWorkPage } from './pages/HowWeWorkPage'
 import { DemoLabsPage } from './pages/DemoLabsPage'
 import { AboutPage } from './pages/AboutPage'
@@ -16,6 +17,7 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage'
 const validPages: PageKey[] = [
   'home',
   'solutions',
+  'projects',
   'how-we-work',
   'demo-labs',
   'about',
@@ -51,6 +53,7 @@ export function App() {
       <main>
         {currentPage === 'home' && <HomePage onNavigate={navigateTo} />}
         {currentPage === 'solutions' && <SolutionsPage onNavigate={navigateTo} />}
+        {currentPage === 'projects' && <ProjectsPage onNavigate={navigateTo} />}
         {currentPage === 'how-we-work' && <HowWeWorkPage onNavigate={navigateTo} />}
         {currentPage === 'demo-labs' && <DemoLabsPage onNavigate={navigateTo} />}
         {currentPage === 'about' && <AboutPage onNavigate={navigateTo} />}

@@ -9,7 +9,7 @@ export function SolutionsPage({ onNavigate }: SolutionsPageProps) {
     <section className="section">
       <div className="section-heading">
         <div>
-          <div className="eyebrow">SOLUTIONS</div>
+          <div className="eyebrow">SOLUTIONS · 4 CORE PILLARS</div>
           <h1>
             Customized around
             <br />
@@ -17,18 +17,18 @@ export function SolutionsPage({ onNavigate }: SolutionsPageProps) {
           </h1>
         </div>
         <p>
-          We study your bottlenecks first and then build the right AI automation,
-          custom software, or integration.
+          We study your bottlenecks first and then combine AI automation,
+          custom software, integrations, or data intelligence as needed.
         </p>
       </div>
 
-      <div className="grid-3">
+      <div className="grid-2">
         {solutionsData.map((item) => (
           <article className="card" key={item.number}>
             <div>
               <div className="card-top">
                 <span>{item.number}</span>
-                <span style={{ color: '#58D6E8' }}>↗</span>
+                <span className="card-arrow">↗</span>
               </div>
               <div className="card-tag">{item.tag}</div>
               <h3>{item.title}</h3>
@@ -38,19 +38,29 @@ export function SolutionsPage({ onNavigate }: SolutionsPageProps) {
                   <li key={d}>{d}</li>
                 ))}
               </ul>
+              <div className="demo-preview-box" style={{ marginTop: '16px' }}>
+                <strong>Example Flow:</strong> {item.exampleFlow}
+              </div>
             </div>
             <div className="card-foot">{item.whenToUse}</div>
           </article>
         ))}
       </div>
 
-      <div style={{ marginTop: '36px' }}>
+      <div className="wizard-actions" style={{ marginTop: '36px' }}>
         <button
           type="button"
           className="primary-button"
+          onClick={() => onNavigate('demo-labs')}
+        >
+          Test in Demo Labs <span>↗</span>
+        </button>
+        <button
+          type="button"
+          className="secondary-button"
           onClick={() => onNavigate('consultation')}
         >
-          Discuss your requirement <span>↗</span>
+          Start a Project <span>→</span>
         </button>
       </div>
     </section>
