@@ -1126,3 +1126,78 @@ h2 span {
     grid-template-columns: 1fr;
   }
 }
+
+/* Phase 4: Pillar Blueprint & Lifecycle Matrix */
+.pillar-card {
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.pillar-card:hover {
+  border-color: rgba(88, 214, 232, 0.45);
+}
+
+.pillar-card.active-pillar {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(88, 214, 232, 0.06), var(--bg-card));
+}
+
+.blueprint-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.lifecycle-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.lifecycle-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr 1.4fr;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  align-items: center;
+}
+
+.lifecycle-phase {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text-main);
+}
+
+.lifecycle-cell small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.lifecycle-cell span {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 960px) {
+  .blueprint-flow-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lifecycle-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .blueprint-flow-grid {
+    grid-template-columns: 1fr;
+  }
+}

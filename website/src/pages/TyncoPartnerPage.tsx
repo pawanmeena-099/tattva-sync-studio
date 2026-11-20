@@ -4,6 +4,29 @@ interface TyncoPartnerPageProps {
   onNavigate: (page: PageKey) => void
 }
 
+const lifecycleRows = [
+  {
+    phase: 'Discovery & Problem Audit',
+    tattvaRole: 'Maps bottlenecks, tools & operational scope',
+    tyncoRole: 'Reviews infrastructure & deployment readiness',
+  },
+  {
+    phase: 'Architecture & Engineering',
+    tattvaRole: 'Builds AI workflows, custom apps, APIs & dashboards',
+    tyncoRole: 'Prepares target hosting & environment setup',
+  },
+  {
+    phase: 'Installation & Go-Live',
+    tattvaRole: 'Delivers tested build & handover documentation',
+    tyncoRole: 'Executes live installation, configuration & launch',
+  },
+  {
+    phase: 'Ongoing Care & Updates',
+    tattvaRole: 'Available for new feature builds or major upgrades',
+    tyncoRole: 'Handles maintenance, patches, monitoring & support',
+  },
+]
+
 export function TyncoPartnerPage({ onNavigate }: TyncoPartnerPageProps) {
   return (
     <section className="section">
@@ -58,6 +81,32 @@ export function TyncoPartnerPage({ onNavigate }: TyncoPartnerPageProps) {
             <li>Uptime monitoring &amp; health checks</li>
             <li>Ongoing technical support &amp; operations care</li>
           </ul>
+        </div>
+      </div>
+
+      {/* Lifecycle Responsibility Split */}
+      <div className="lab-workspace" style={{ marginTop: '36px' }}>
+        <div className="lab-workspace-head">
+          <div>
+            <span className="demo-badge">LIFECYCLE SEPARATION</span>
+            <h3>Who Owns What Across Your System Lifecycle</h3>
+          </div>
+        </div>
+
+        <div className="lifecycle-list">
+          {lifecycleRows.map((row) => (
+            <div className="lifecycle-row" key={row.phase}>
+              <div className="lifecycle-phase">{row.phase}</div>
+              <div className="lifecycle-cell">
+                <small>TATTVA SYNC</small>
+                <span>{row.tattvaRole}</span>
+              </div>
+              <div className="lifecycle-cell">
+                <small>TYNCO</small>
+                <span>{row.tyncoRole}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
