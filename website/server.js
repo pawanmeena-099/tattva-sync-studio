@@ -10,7 +10,14 @@ const app = express()
 app.set('trust proxy', 1)
 const PORT = Number(process.env.PORT) || 4173
 
-app.use(express.json({ limit: '256kb' }))
+app.use(express.json({ limit: '32kb' }))
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+  res.setHeader('X-Frame-Options', 'DENY')
+  if (req.path.startsWith('/api/')) res.setHeader('Cache-Control', 'no-store')
+  next()
+})
 
 const dataDir = path.join(__dirname, 'runtime-data')
 if (!fs.existsSync(dataDir)) {
@@ -37,8 +44,15 @@ function loadInquiries() {
 }
 
 function saveInquiries(records) {
-  fs.writeFileSync(inquiriesFile, JSON.stringify(records, null, 2), 'utf8')
+  const tempFile = `${inquiriesFile}.tmp`
+  fs.writeFileSync(tempFile, JSON.stringify(records, null, 2), 'utf8')
+  fs.renameSync(tempFile, inquiriesFile)
 }
+
+function safeText(value, maxLength, fallback = '') {
+  return String(value ?? fallback).trim().slice(0, maxLength)
+}
+
 
 async function generateDiscoveryBrief(record) {
   const apiKey = process.env.OPENAI_API_KEY
@@ -51,7 +65,10 @@ async function generateDiscoveryBrief(record) {
         `Inquiry: ${JSON.stringify(record)}`,
       ].join('\n')
 
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 18_000)
       const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+        signal: controller.signal,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,11 +81,25 @@ async function generateDiscoveryBrief(record) {
           temperature: 0.3,
         }),
       })
+      clearTimeout(timeout)
 
       if (resp.ok) {
         const data = await resp.json()
         const content = data?.choices?.[0]?.message?.content
-        if (content) return JSON.parse(content)
+        if (content) {
+          const parsed = JSON.parse(content)
+          if (typeof parsed.bottleneckSummary === 'string' &&
+              typeof parsed.suggestedArchitecture === 'string' &&
+              Array.isArray(parsed.discoveryQuestions) &&
+              typeof parsed.tyncoHandoverNote === 'string') {
+            return {
+              bottleneckSummary: parsed.bottleneckSummary.slice(0, 1200),
+              suggestedArchitecture: parsed.suggestedArchitecture.slice(0, 1200),
+              discoveryQuestions: parsed.discoveryQuestions.slice(0, 5).map(q => String(q).slice(0, 500)),
+              tyncoHandoverNote: parsed.tyncoHandoverNote.slice(0, 1200),
+            }
+          }
+        }
       }
     } catch (err) {
       console.error('[AI_BRIEF_FALLBACK]', err)
@@ -101,7 +132,8 @@ app.get('/api/health', (_req, res) => {
 // Protected Founder Queue View: GET /api/inquiries?key=YOUR_ADMIN_KEY
 app.get('/api/inquiries', (req, res) => {
   const adminKey = process.env.ADMIN_KEY
-  if (!adminKey || req.query.key !== adminKey) {
+  const suppliedKey = req.get('x-admin-key') || req.query.key
+  if (!adminKey || suppliedKey !== adminKey) {
     return res.status(401).json({ ok: false, error: 'Unauthorized' })
   }
   return res.json({ ok: true, count: loadInquiries().length, items: loadInquiries() })
@@ -111,9 +143,9 @@ app.get('/api/inquiries', (req, res) => {
 app.post('/api/inquiry', async (req, res) => {
   if (!allowInquiry(req.ip || 'unknown')) return res.status(429).json({ ok: false, error: 'Too many submissions. Try again later.' })
   const body = req.body ?? {}
-  const contactName = String(body.contactName ?? '').trim()
-  const workEmail = String(body.workEmail ?? '').trim().toLowerCase()
-  const workflowBottleneck = String(body.workflowBottleneck ?? '').trim()
+  const contactName = safeText(body.contactName, 120)
+  const workEmail = safeText(body.workEmail, 254).toLowerCase()
+  const workflowBottleneck = safeText(body.workflowBottleneck, 5000)
 
   if (!contactName || !workEmail || !workflowBottleneck) {
     return res.status(400).json({ ok: false, error: 'Missing required fields' })
@@ -129,10 +161,10 @@ app.post('/api/inquiry', async (req, res) => {
     referenceId: String(body.referenceId || `TS-${Date.now().toString().slice(-6)}`),
     receivedAt: new Date().toISOString(),
     contactName,
-    companyName: String(body.companyName ?? 'Not specified').trim(),
+    companyName: safeText(body.companyName, 160, 'Not specified') || 'Not specified',
     workEmail,
-    selectedPillar: String(body.selectedPillar ?? 'General Discovery').trim(),
-    currentTools: String(body.currentTools ?? 'Not specified').trim(),
+    selectedPillar: safeText(body.selectedPillar, 120, 'General Discovery') || 'General Discovery',
+    currentTools: safeText(body.currentTools, 1000, 'Not specified') || 'Not specified',
     workflowBottleneck,
     includeTyncoOperations: Boolean(body.includeTyncoOperations),
     status: 'PENDING_FOUNDER_REVIEW',
@@ -143,21 +175,30 @@ app.post('/api/inquiry', async (req, res) => {
 
   const existing = loadInquiries()
   existing.unshift(fullRecord)
-  saveInquiries(existing)
+  // Keep the founder queue bounded so the JSON store does not grow indefinitely.
+  if (existing.length > 2000) existing.length = 2000
+  try {
+    saveInquiries(existing)
+  } catch (err) {
+    console.error('[INQUIRY_SAVE_ERROR]', err)
+    return res.status(500).json({ ok: false, error: 'Inquiry could not be saved. Please retry.' })
+  }
 
   console.log('[TATTVA_SYNC_BRIEF]', JSON.stringify(fullRecord))
 
   const forwardWebhook = process.env.FORWARD_WEBHOOK_URL
   if (forwardWebhook) {
-    try {
-      await fetch(forwardWebhook, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fullRecord),
-      })
-    } catch (err) {
-      console.error('[FORWARD_WEBHOOK_ERROR]', err)
-    }
+    // Webhook delivery is best-effort; do not hold the client response open.
+    const webhookController = new AbortController()
+    const webhookTimeout = setTimeout(() => webhookController.abort(), 8_000)
+    fetch(forwardWebhook, {
+      signal: webhookController.signal,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fullRecord),
+    })
+      .catch((err) => console.error('[FORWARD_WEBHOOK_ERROR]', err))
+      .finally(() => clearTimeout(webhookTimeout))
   }
 
   return res.status(200).json({ ok: true, referenceId: fullRecord.referenceId })

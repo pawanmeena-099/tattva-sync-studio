@@ -36,6 +36,22 @@ export function App() {
   const [currentPage, setCurrentPage] = useState<PageKey>(getPageFromHash)
 
   useEffect(() => {
+    const pageTitles: Record<PageKey, string> = {
+      home: 'Tattva Sync — AI Systems & Software Studio',
+      solutions: 'Solutions — Tattva Sync',
+      projects: 'Projects — Tattva Sync',
+      'how-we-work': 'How We Work — Tattva Sync',
+      'demo-labs': 'Demo Labs — Tattva Sync',
+      about: 'About — Tattva Sync',
+      'tynco-partner': 'Tynco Partner — Tattva Sync',
+      consultation: 'Start a Project — Tattva Sync',
+      terms: 'Terms — Tattva Sync',
+      privacy: 'Privacy — Tattva Sync',
+    }
+    document.title = pageTitles[currentPage] ?? pageTitles.home
+  }, [currentPage])
+
+  useEffect(() => {
     const onHashChange = () => setCurrentPage(getPageFromHash())
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)

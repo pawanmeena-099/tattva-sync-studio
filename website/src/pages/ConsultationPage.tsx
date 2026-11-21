@@ -55,7 +55,13 @@ export function ConsultationPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      setDeliveryStatus(res.ok ? 'synced' : 'failed')
+      if (res.ok) {
+        const responseBody = await res.json().catch(() => null)
+        if (responseBody?.referenceId) setReferenceId(String(responseBody.referenceId))
+        setDeliveryStatus('synced')
+      } else {
+        setDeliveryStatus('failed')
+      }
     } catch {
       setDeliveryStatus('failed')
     }
@@ -165,6 +171,7 @@ export function ConsultationPage() {
               type="text"
               required
               placeholder="Your name *"
+              maxLength={120}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -172,6 +179,7 @@ export function ConsultationPage() {
               className="enquiry-input"
               type="text"
               placeholder="Business / Brand name"
+              maxLength={160}
               value={company}
               onChange={(e) => setCompany(e.target.value)}
             />
@@ -183,6 +191,7 @@ export function ConsultationPage() {
               type="email"
               required
               placeholder="Work email *"
+              maxLength={254}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -203,6 +212,7 @@ export function ConsultationPage() {
             className="enquiry-input"
             type="text"
             placeholder="Current tools used (e.g., WhatsApp, Excel, Google Sheets, Notion, CRM...)"
+            maxLength={1000}
             value={currentTools}
             onChange={(e) => setCurrentTools(e.target.value)}
           />
@@ -210,6 +220,7 @@ export function ConsultationPage() {
           <textarea
             className="enquiry-textarea"
             rows={4}
+            maxLength={5000}
             required
             placeholder="Describe where manual work slows your team down, what repeats daily, or what outcome you want *"
             value={currentProcess}
