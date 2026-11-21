@@ -1,81 +1,79 @@
 import { useState } from 'react'
-import type { PageKey } from '../data/siteData'
+import type { TyncoPageKey } from '../data/tyncoData'
 
 interface NavbarProps {
-  currentPage: PageKey
-  onNavigate: (page: PageKey) => void
+  currentPage: TyncoPageKey
+  onNavigate: (page: TyncoPageKey) => void
 }
 
-const navItems: { key: PageKey; label: string }[] = [
-  { key: 'home', label: 'Home' },
-  { key: 'solutions', label: 'Solutions' },
-  { key: 'projects', label: 'Projects' },
-  { key: 'demo-labs', label: 'Demo Labs' },
-  { key: 'how-we-work', label: 'How We Work' },
-  { key: 'about', label: 'About' },
-  { key: 'tynco-partner', label: 'Tynco Partner' },
+const navItems: { key: TyncoPageKey; label: string }[] = [
+  { key: 'home', label: 'Overview' },
+  { key: 'services', label: 'Services' },
+  { key: 'handover', label: 'Our Partnership' },
+  { key: 'sla-plans', label: 'Maintenance Plans' },
 ]
 
 export function Navbar({ currentPage, onNavigate }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const handleSelect = (page: PageKey) => {
+  const handleSelect = (page: TyncoPageKey) => {
     setMenuOpen(false)
     onNavigate(page)
   }
 
   return (
-    <header className="navbar">
-      <button
-        type="button"
-        className="brand brand-btn"
-        onClick={() => handleSelect('home')}
-      >
-        <span className="brand-mark">T</span>
-        <span>
-          TATTVA<span className="brand-light">SYNC</span>
-        </span>
-      </button>
-
-      <nav className="nav-links" aria-label="Primary Navigation">
-        {navItems.map((item) => (
-          <button
-            key={item.key}
-            type="button"
-            className={`nav-link-btn ${currentPage === item.key ? 'active' : ''}`}
-            onClick={() => handleSelect(item.key)}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
-
-      <div className="nav-right-group">
+    <header className="tynco-nav-wrap">
+      <div className="tynco-nav">
         <button
           type="button"
-          className="nav-cta desktop-only-cta"
-          onClick={() => handleSelect('consultation')}
+          className="tynco-brand"
+          onClick={() => handleSelect('home')}
         >
-          Start a Project <span>↗</span>
+          <span className="tynco-mark">T.</span>
+          <span>TYNCO</span>
         </button>
 
-        <button
-          type="button"
-          className="mobile-menu-btn"
-          aria-label="Toggle Menu"
-          onClick={() => setMenuOpen((prev) => !prev)}
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
-      </div>
-
-      {menuOpen && (
-        <div className="mobile-drawer">
+        <nav className="tynco-links">
           {navItems.map((item) => (
             <button
               key={item.key}
               type="button"
-              className={`mobile-drawer-link ${currentPage === item.key ? 'active' : ''}`}
+              className={currentPage === item.key ? 'active' : undefined}
+              onClick={() => handleSelect(item.key)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="tynco-nav-actions">
+          <button
+            type="button"
+            className="tynco-cta"
+            onClick={() => handleSelect('request-care')}
+          >
+            Get Operations Support ↗
+          </button>
+
+          <button
+            type="button"
+            className="tynco-menu-btn"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((prev) => !prev)}
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
+      </div>
+
+      {menuOpen && (
+        <nav className="tynco-mobile-drawer">
+          {navItems.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={currentPage === item.key ? 'active' : undefined}
               onClick={() => handleSelect(item.key)}
             >
               {item.label}
@@ -83,13 +81,12 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
           ))}
           <button
             type="button"
-            className="primary-button"
-            style={{ justifyContent: 'center', marginTop: '8px' }}
-            onClick={() => handleSelect('consultation')}
+            className="tynco-mobile-cta"
+            onClick={() => handleSelect('request-care')}
           >
-            Start a Project <span>↗</span>
+            Request Support ↗
           </button>
-        </div>
+        </nav>
       )}
     </header>
   )

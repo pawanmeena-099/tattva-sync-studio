@@ -18,7 +18,7 @@ export function ConsultationPage() {
   const [includeTyncoSupport, setIncludeTyncoSupport] = useState(true)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [deliveryStatus, setDeliveryStatus] = useState<'synced' | 'local-recorded'>('local-recorded')
+  const [deliveryStatus, setDeliveryStatus] = useState<'synced' | 'failed'>('failed')
   const [referenceId, setReferenceId] = useState('')
   const [copied, setCopied] = useState(false)
 
@@ -55,9 +55,9 @@ export function ConsultationPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      setDeliveryStatus(res.ok ? 'synced' : 'local-recorded')
+      setDeliveryStatus(res.ok ? 'synced' : 'failed')
     } catch {
-      setDeliveryStatus('local-recorded')
+      setDeliveryStatus('failed')
     }
 
     setSubmitting(false)
@@ -109,18 +109,16 @@ export function ConsultationPage() {
             <span className="demo-badge">REF · {referenceId}</span>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
               {deliveryStatus === 'synced'
-                ? 'Synced to intake server'
-                : 'Recorded for review'}
+                ? 'Received by intake server'
+                : 'Not submitted — server connection failed'}
             </span>
           </div>
 
           <h3 style={{ margin: '0 0 8px', fontSize: '20px' }}>
-            Discovery brief received, {name}.
+            {deliveryStatus === 'synced' ? `Discovery brief received, ${name}.` : `Your draft is ready, ${name}.`}
           </h3>
           <p style={{ margin: '0 0 14px', fontSize: '13.5px', color: '#c1c4b9', lineHeight: 1.7 }}>
-            Your inquiry under <strong>{pillar}</strong> has been structured and
-            queued for founder review. We will follow up at{' '}
-            <strong>{email}</strong> with targeted discovery questions.
+            {deliveryStatus === 'synced' ? <>Your inquiry under <strong>{pillar}</strong> has been queued for founder review. A follow-up is expected at <strong>{email}</strong>.</> : <>This inquiry has <strong>not been sent or saved on the server</strong>. You can retry submission or copy the brief for safekeeping.</>}
           </p>
 
           <div className="demo-preview-box">
@@ -146,6 +144,7 @@ export function ConsultationPage() {
             >
               {copied ? 'Copied Brief ✓' : 'Copy Discovery Brief'}
             </button>
+            {deliveryStatus === 'failed' && <button type="button" className="secondary-button" onClick={() => setSubmitted(false)}>Retry Submission <span>↻</span></button>}
             <button
               type="button"
               className="secondary-button"
